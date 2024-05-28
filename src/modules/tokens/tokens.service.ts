@@ -1,7 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { VerificationToken } from './entities/verification-token.entity';
-import * as crypto from 'crypto';
+
+const randomToken = (
+  size: number,
+  type: 'number' | 'letters' | 'alphanumeric',
+): string => {
+  const chars =
+    type === 'number'
+      ? '0123456789'
+      : type === 'letters'
+        ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        : 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+  let token = '';
+
+  for (let i = 0; i < size; i++) {
+    // obtém um caractere aleatório de caracteres e concatena-o ao token
+    token += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+
+  return token;
+};
 
 @Injectable()
 export class TokensService {
@@ -79,7 +99,7 @@ export class TokensService {
   }
 
   async generateVerificationToken(email: string): Promise<VerificationToken> {
-    const token = crypto.randomInt(100_000, 1_000_000).toString();
+    const token = randomToken(8, 'alphanumeric');
     const expires = new Date(new Date().getTime() + 15 * 60 * 1000); // 15 minutes
 
     const existingToken = await this.getVerificationTokenByEmail(email);
@@ -104,7 +124,7 @@ export class TokensService {
   }
 
   async generatePasswordResetToken(email: string): Promise<VerificationToken> {
-    const token = crypto.randomInt(100_000, 1_000_000).toString();
+    const token = randomToken(8, 'alphanumeric');
     const expires = new Date(new Date().getTime() + 3600 * 1000); // 1 hour
 
     const existingToken = await this.getPasswordResetTokenByEmail(email);
@@ -127,7 +147,7 @@ export class TokensService {
   }
 
   async generateTwoFactorToken(email: string): Promise<VerificationToken> {
-    const token = crypto.randomInt(100_000, 1_000_000).toString();
+    const token = randomToken(6, 'number');
     const expires = new Date(new Date().getTime() + 15 * 60 * 1000); // 15 minutes
 
     const existingToken = await this.getTwoFactorTokenByEmail(email);
