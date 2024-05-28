@@ -18,6 +18,54 @@ Sistema de autênticação com NestJs
 - Redefinição de senha
 - Envio de emails com nodemailer
 
+## Instalação
+
+Este projeto utiliza [node](http://nodejs.org) e [npm](https://npmjs.com). Verifique se você possui instalados localmente.
+
+```sh
+$ npm install
+```
+Crie um arquivo .env e o preencha com as configuração abaixo
+
+```env
+# Configuration
+JWT_SECRET="[Senha secreta para o JWT]"
+
+# Database
+
+DATABASE_URL="[URL de comunicação com o banco de dados]"
+
+# Email
+
+EMAIL_HOST="[Host do servidor de email]"
+EMAIL_PORT=[Porta do servidor de email]
+EMAIL_USERNAME="[Usuário]"
+EMAIL_PASSWORD="[Senha]"
+
+# Redis - Caso utilize
+
+REDIS_HOST="[Host Redis]"
+REDIS_PORT=[Porta Redis]
+```
+
+OPCIONAL: Execute o docker compose caso não possua nenhum banco de dados e/ou Redis
+```sh
+$ docker compose up -d
+```
+
+
+Execute os comandos do prisma
+```sh
+$ npx prisma generate
+$ npx prisma migrate dev --name init
+```
+
+Inicie a plicação
+```sh
+$ npm run start
+```
+
+
 ## Endpoints
 
 - [Sign In](#sign-in)
