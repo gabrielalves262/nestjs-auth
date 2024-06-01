@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { VerificationToken } from './entities/verification-token.entity';
+import { v4 } from 'uuid';
 
 const randomToken = (
   size: number,
@@ -99,7 +100,7 @@ export class TokensService {
   }
 
   async generateVerificationToken(email: string): Promise<VerificationToken> {
-    const token = randomToken(8, 'alphanumeric');
+    const token = v4();
     const expires = new Date(new Date().getTime() + 15 * 60 * 1000); // 15 minutes
 
     const existingToken = await this.getVerificationTokenByEmail(email);
