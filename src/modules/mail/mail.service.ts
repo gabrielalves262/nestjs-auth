@@ -13,7 +13,7 @@ export class MailService {
   constructor(private readonly mailerService: MailerService) {}
 
   async sendVerificationEmail(user: User, token: string) {
-    const url = `${this.BASE_URL}/${this.PATHNAMES.confirmEmail}?token=${token}`;
+    const url = `${this.BASE_URL}${this.PATHNAMES.confirmEmail}?token=${token}`;
     await this.mailerService.sendMail({
       to: user.email,
       subject: 'Confirme seu email',
@@ -27,15 +27,16 @@ export class MailService {
   }
 
   async sendResetPasswordEmail(user: User, token: string) {
+    const url = `${this.BASE_URL}${this.PATHNAMES.resetPassword}?token=${token}`;
     await this.mailerService.sendMail({
       to: user.email,
       subject: 'Redefinir senha',
       template: './reset',
       context: {
         name: user.name.split(' ')[0],
-        code: token,
+        url,
       },
-      text: `Olá, ${user.name}!\n\nUtilize o código abaixo para redefinir sua senha.\n\n${token}\n\nCaso você não tenha solicitado a redefinição de sua senha, ignore esta mensagem.\n\nAtenciosamente, Equipe NestJs Auth`,
+      text: `Olá, ${user.name}!\n\nPara redefinir sua senha, copie o link abaixo e cole em uma nova aba do seu navegador.\n\n${url}\n\nCaso você não tenha solicitado a redefinição de sua senha, ignore esta mensagem.\n\nAtenciosamente, Equipe NestJs Auth`,
     });
   }
 

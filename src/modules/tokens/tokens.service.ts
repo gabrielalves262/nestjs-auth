@@ -125,7 +125,7 @@ export class TokensService {
   }
 
   async generatePasswordResetToken(email: string): Promise<VerificationToken> {
-    const token = randomToken(8, 'alphanumeric');
+    const token = v4();
     const expires = new Date(new Date().getTime() + 3600 * 1000); // 1 hour
 
     const existingToken = await this.getPasswordResetTokenByEmail(email);
