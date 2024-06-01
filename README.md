@@ -28,21 +28,25 @@ $ npm install
 Crie um arquivo .env e o preencha com as configuração abaixo
 
 ```env
-# Configuration
-JWT_SECRET="[Senha secreta para o JWT]"
+# Configuração ----------------------------------------------
 
-# Database
+JWT_SECRET=[Senha secreta para o JWT]
+
+# Url do frontend que irá ser recebido no email
+REDIRECT_FRONTEND_URL="http://localhost:3000"
+
+# Database --------------------------------------------------
 
 DATABASE_URL="[URL de comunicação com o banco de dados]"
 
-# Email
+# Email -----------------------------------------------------
 
 EMAIL_HOST="[Host do servidor de email]"
 EMAIL_PORT=[Porta do servidor de email]
 EMAIL_USERNAME="[Usuário]"
 EMAIL_PASSWORD="[Senha]"
 
-# Redis - Caso utilize
+# Redis - Caso utilize --------------------------------------
 
 REDIS_HOST="[Host Redis]"
 REDIS_PORT=[Porta Redis]

@@ -4,19 +4,25 @@ import { User } from './entities/user.entity';
 
 @Injectable()
 export class MailService {
-  domain = process.env.DOMAIN || '';
+  BASE_URL = process.env.REDIRECT_FRONTEND_URL || '';
+  PATHNAMES = {
+    confirmEmail: '/auth/confirm-email',
+    resetPassword: '/auth/reset-password',
+  };
+
   constructor(private readonly mailerService: MailerService) {}
 
   async sendVerificationEmail(user: User, token: string) {
+    const url = `${this.BASE_URL}/${this.PATHNAMES.confirmEmail}?token=${token}`;
     await this.mailerService.sendMail({
       to: user.email,
-      subject: 'Confirmação de email',
+      subject: 'Confirme seu email',
       template: './confirmation',
       context: {
-        name: user.name,
-        code: token,
+        name: user.name.split(' ')[0],
+        url,
       },
-      text: `Olá, ${user.name}!\n\nObrigado por se registrar no NestJs Auth.\n\nUtilize o código abaixo para confirmar o seu cadastro:\n\n${token}\n\nCaso você não tenha feito o cadastro em nosso sistema, ignore esta mensagem.\n\nAtenciosamente, Equipe NestJs Auth`,
+      text: `Olá, ${user.name}!\n\nObrigado por se juntar a nós!.\n\nPara verificar sua conta, confirme seu email copiando o link abaixo e colando em uma nova aba do seu navegador:\n\n${url}\n\nCaso você não tenha feito o cadastro em nosso sistema, ignore esta mensagem.\n\nAtenciosamente, Equipe NestJs Auth`,
     });
   }
 
@@ -26,7 +32,7 @@ export class MailService {
       subject: 'Redefinir senha',
       template: './reset',
       context: {
-        name: user.name,
+        name: user.name.split(' ')[0],
         code: token,
       },
       text: `Olá, ${user.name}!\n\nUtilize o código abaixo para redefinir sua senha.\n\n${token}\n\nCaso você não tenha solicitado a redefinição de sua senha, ignore esta mensagem.\n\nAtenciosamente, Equipe NestJs Auth`,
@@ -39,7 +45,7 @@ export class MailService {
       subject: 'Autênticação 2FA',
       template: './two-factor',
       context: {
-        name: user.name,
+        name: user.name.split(' ')[0],
         code: token,
       },
       text: `Olá, ${user.name}!\n\nUtilize o código abaixo para acessar sua conta.\n\n${token}\n\nAtenciosamente, Equipe NestJs Auth`,
